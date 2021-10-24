@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Gateway.API\Gateway.API.csproj" />
       <ProjectReference Include="..\Gateway.Domain.Tests\Gateway.Domain.Tests.csproj" />
     </ItemGroup>
 

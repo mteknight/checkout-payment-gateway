@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Gateway.Domain.Tests.Services
 {
-    public class PaymentServiceTests
+    public sealed class PaymentServiceTests
     {
         [Fact]
         public Task GivenNullPayment_WhenExecutingPayment_ThenThrowArgumentNullException()

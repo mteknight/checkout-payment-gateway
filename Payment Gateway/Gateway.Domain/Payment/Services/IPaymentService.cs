@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Gateway.Domain.Payment.Services
+namespace Gateway.Domain.Services
 {
     public interface IPaymentService
     {

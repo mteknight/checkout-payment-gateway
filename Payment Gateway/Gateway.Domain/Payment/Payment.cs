@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 using Dawn;
 
-using Gateway.Domain.Payment.Services;
+using Gateway.Domain.Services;
 
-namespace Gateway.Domain.Payment
+namespace Gateway.Domain
 {
     public class Payment
     {

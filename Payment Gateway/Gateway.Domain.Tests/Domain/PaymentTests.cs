@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using FluentAssertions;
 
-using Gateway.Domain.Payment.Services;
+using Gateway.Domain.Services;
 
 using Moq;
 
@@ -17,7 +17,7 @@ namespace Gateway.Domain.Tests.Domain
         public Task GivenServiceNull_WhenExecutingPayment_ThenThrowArgumentNullException()
         {
             // Arrange
-            var payment = new Payment.Payment();
+            var payment = new Payment();
             var service = default(IPaymentService);
 
             // Act
@@ -36,7 +36,7 @@ namespace Gateway.Domain.Tests.Domain
         public async Task GivenServiceProvided_WhenExecutingService_ThenExecuteFromService()
         {
             // Arrange
-            var payment = new Payment.Payment();
+            var payment = new Payment();
             var mockedService = new Mock<IPaymentService>();
             mockedService
                 .Setup(service => service.Execute(payment))

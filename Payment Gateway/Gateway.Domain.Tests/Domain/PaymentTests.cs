@@ -5,6 +5,8 @@ using Dawn;
 
 using FluentAssertions;
 
+using Moq;
+
 using Xunit;
 
 namespace Gateway.Test.Domain
@@ -28,6 +30,23 @@ namespace Gateway.Test.Domain
 
             // Assert
             return sutCall.Should().ThrowExactlyAsync<ArgumentNullException>("The service is required to perform the operation.");
+        }
+
+        [Fact]
+        public async Task GivenServiceProvided_WhenExecutingService_ThenExecuteFromService()
+        {
+            // Arrange
+            var payment = new Payment();
+            var mockedService = new Mock<IPaymentService>();
+            mockedService
+                .Setup(service => service.Execute(payment))
+                .Verifiable();
+
+            // Act
+            await payment.Execute(mockedService.Object);
+
+            // Assert
+            mockedService.Verify(service => service.Execute(payment), () => Times.Exactly(1));
         }
     }
 
@@ -56,7 +75,7 @@ namespace Gateway.Test.Domain
         Task<bool> Execute(Payment payment);
     }
 
-    public class PaymentService : IPaymentService
+    internal class PaymentService : IPaymentService
     {
         public Task<bool> Execute(Payment payment)
         {

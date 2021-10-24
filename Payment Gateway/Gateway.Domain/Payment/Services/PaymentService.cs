@@ -18,6 +18,8 @@ namespace Gateway.Domain.Services
 
         public Task<bool> Execute(Payment payment)
         {
+            Guard.Argument(payment, nameof(payment)).NotNull();
+
             throw new NotImplementedException();
         }
     }

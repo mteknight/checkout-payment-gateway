@@ -1,3 +1,5 @@
+***Please check Final Thoughts at the end.***
+
 # checkout-payment-gateway
 
 ## Requirements
@@ -34,3 +36,12 @@ areas to consider:
 - Any assumptions you made.
 - Areas for improvement.
 - What cloud technologies you’d use and why.
+
+## Final Thoughts (Dev)
+1. The entire implementation was done in TDD and designed in DDD.
+2. The `HttpClientService` is a wrapper around the HttpClient, as it is hard to test.
+3. At this point, there is no *Acquiring Bank* URI available, but I would expect to have it in a config file at a later stage. We can then inject as `Options` and use it.
+4. A bank simulator was mentioned but was not provided. I assumed it would accept a `Payment` object and return a `bool`; However, It is not necessary at this stage since the service is mocked, but would become more relevant once we implement the acceptance tests. At that point, integration tests would also be required.
+5. I did not make assumptions regarding how the *Acquiring Bank* server would operate, but the `HttpClientService` would naturally have to adapt to it's requirements.
+6. There is no data persistence at this point. I would see it in the `Gateway.Data` project, abstracting away the data responsibilities from the Domain, similarly to what `HttpClientService` does. It should be well designed to accommodate possible changes in data access as well (db, file, or even db apis).
+7. To wrap up, I understand more deliverables were expected. However, I believe that what is delivered now is enough to showcase how I would approach the problem from a code standpoint and when combined with the white-boarding session, the solution design becomes clear without spending many hours to make the complete solution.

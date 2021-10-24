@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
 
-using Dawn;
-
 using FluentAssertions;
+
+using Gateway.Domain.Payment.Services;
 
 using Moq;
 
 using Xunit;
 
-namespace Gateway.Test.Domain
+namespace Gateway.Domain.Tests.Domain
 {
     public class PaymentTests
     {
@@ -17,7 +17,7 @@ namespace Gateway.Test.Domain
         public Task GivenServiceNull_WhenExecutingPayment_ThenThrowArgumentNullException()
         {
             // Arrange
-            var payment = new Payment();
+            var payment = new Payment.Payment();
             var service = default(IPaymentService);
 
             // Act
@@ -36,7 +36,7 @@ namespace Gateway.Test.Domain
         public async Task GivenServiceProvided_WhenExecutingService_ThenExecuteFromService()
         {
             // Arrange
-            var payment = new Payment();
+            var payment = new Payment.Payment();
             var mockedService = new Mock<IPaymentService>();
             mockedService
                 .Setup(service => service.Execute(payment))
@@ -47,39 +47,6 @@ namespace Gateway.Test.Domain
 
             // Assert
             mockedService.Verify(service => service.Execute(payment), () => Times.Exactly(1));
-        }
-    }
-
-    public class Payment
-    {
-        public string CardNumber { get; set; }
-
-        public DateTime ExpiryDate { get; set; }
-
-        public decimal Amount { get; set; }
-
-        public string Currency { get; set; }
-
-        public string CVV { get; set; }
-
-        public Task<bool> Execute(IPaymentService service)
-        {
-            Guard.Argument(service, nameof(service)).NotNull();
-
-            return service.Execute(this);
-        }
-    }
-
-    public interface IPaymentService
-    {
-        Task<bool> Execute(Payment payment);
-    }
-
-    internal class PaymentService : IPaymentService
-    {
-        public Task<bool> Execute(Payment payment)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -39,14 +40,14 @@ namespace Gateway.Domain.Tests.Domain
             var payment = new Payment();
             var mockedService = new Mock<IPaymentService>();
             mockedService
-                .Setup(service => service.Execute(payment))
+                .Setup(service => service.Execute(payment, It.IsAny<CancellationToken>()))
                 .Verifiable();
 
             // Act
             await payment.Execute(mockedService.Object);
 
             // Assert
-            mockedService.Verify(service => service.Execute(payment), () => Times.Exactly(1));
+            mockedService.Verify(service => service.Execute(payment, It.IsAny<CancellationToken>()), () => Times.Exactly(1));
         }
     }
 }

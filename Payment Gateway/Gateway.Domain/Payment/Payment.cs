@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Dawn;
@@ -19,11 +20,13 @@ namespace Gateway.Domain
 
         public string CVV { get; set; }
 
-        public Task<bool> Execute(IPaymentService service)
+        public Task<bool> Execute(
+            IPaymentService service,
+            CancellationToken cancellationToken = default)
         {
             Guard.Argument(service, nameof(service)).NotNull();
 
-            return service.Execute(this);
+            return service.Execute(this, cancellationToken);
         }
     }
 }

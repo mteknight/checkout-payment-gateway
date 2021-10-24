@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 using Dawn;
@@ -9,6 +9,7 @@ namespace Gateway.Domain.Services
 {
     internal class PaymentService : IPaymentService
     {
+        private const string AcquiringBankUri = "";
         private readonly IHttpClientService httpClientService;
 
         public PaymentService(IHttpClientService httpClientService)
@@ -16,11 +17,13 @@ namespace Gateway.Domain.Services
             this.httpClientService = Guard.Argument(httpClientService, nameof(httpClientService)).NotNull().Value;
         }
 
-        public Task<bool> Execute(Payment payment)
+        public Task<bool> Execute(
+            Payment payment,
+            CancellationToken cancellationToken = default)
         {
             Guard.Argument(payment, nameof(payment)).NotNull();
 
-            throw new NotImplementedException();
+            return this.httpClientService.Post<Payment, bool>(AcquiringBankUri, payment, cancellationToken);
         }
     }
 }

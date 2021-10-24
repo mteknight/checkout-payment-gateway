@@ -21,11 +21,11 @@ namespace Gateway.API.Tests.Controllers
 {
     public sealed class PaymentControllerTests
     {
-        [Theory]
-        [AutoData]
-        public async Task GivenNullPayment_WhenRequestPaymentExecution_ThenReturnBadRequest(Payment payment)
+        [Fact]
+        public async Task GivenNullPayment_WhenRequestPaymentExecution_ThenReturnBadRequest()
         {
             // Arrange
+            var payment = default(Payment);
             var sutController = GetSutController();
 
             // Act

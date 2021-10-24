@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 using Dawn;
 
@@ -21,12 +22,16 @@ namespace Gateway.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExecutePayment([FromBody] Payment payment)
+        public async Task<IActionResult> ExecutePayment(
+            [FromBody] Payment payment,
+            CancellationToken cancellationToken = default)
         {
             if (payment is null)
             {
                 return this.BadRequest($"Parameter {nameof(payment)} is required for this operation.");
             }
+
+            await payment.Execute(this.paymentService, cancellationToken);
 
             return this.Ok();
         }

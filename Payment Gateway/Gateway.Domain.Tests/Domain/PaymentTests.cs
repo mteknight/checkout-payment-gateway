@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using Dawn;
+
 using FluentAssertions;
 
 using Xunit;
@@ -43,6 +45,8 @@ namespace Gateway.Test.Domain
 
         public Task<bool> Execute(IPaymentService service)
         {
+            Guard.Argument(service, nameof(service)).NotNull();
+
             throw new NotImplementedException();
         }
     }

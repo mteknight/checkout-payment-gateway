@@ -21,12 +21,14 @@ namespace Gateway.API.Tests.Controllers
 {
     public sealed class PaymentControllerTests
     {
+        private Mock<IPaymentService> mockedPaymentService;
+
         [Fact]
         public async Task GivenNullPayment_WhenRequestPaymentExecution_ThenReturnBadRequest()
         {
             // Arrange
             var payment = default(Payment);
-            var sutController = GetSutController();
+            var sutController = this.GetSutController();
 
             // Act
             var result = await sutController.ExecutePayment(payment);
@@ -36,9 +38,24 @@ namespace Gateway.API.Tests.Controllers
 
         }
 
-        private static PaymentController GetSutController(bool expectedResult = default)
+        [Theory]
+        [AutoData]
+        public async Task GivenValidPayment_WhenRequestPaymentExecution_ThenCallServiceExecute(Payment payment)
         {
-            var mockedPaymentService = SetupPaymentServiceMock(expectedResult);
+            // Arrange
+            var sutController = this.GetSutController();
+
+            // Act
+            await sutController.ExecutePayment(payment);
+
+            // Assert
+            this.mockedPaymentService
+                .Verify(service => service.Execute(It.IsAny<Payment>(), It.IsAny<CancellationToken>()), () => Times.Exactly(1));
+        }
+
+        private PaymentController GetSutController(bool expectedResult = default)
+        {
+            var mockedPaymentService = this.SetupPaymentServiceMock(expectedResult);
 
             return DIHelper.GetServices()
                 .AddSingleton<PaymentController>()
@@ -46,14 +63,15 @@ namespace Gateway.API.Tests.Controllers
                 .GetConfiguredService<PaymentController>();
         }
 
-        private static Mock<IPaymentService> SetupPaymentServiceMock(bool expectedResult)
+        private Mock<IPaymentService> SetupPaymentServiceMock(bool expectedResult)
         {
-            var mockedPaymentService = new Mock<IPaymentService>();
-            mockedPaymentService
+            this.mockedPaymentService = new Mock<IPaymentService>();
+            this.mockedPaymentService
                 .Setup(service => service.Execute(It.IsAny<Payment>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(expectedResult);
+                .ReturnsAsync(expectedResult)
+                .Verifiable();
 
-            return mockedPaymentService;
+            return this.mockedPaymentService;
         }
     }
 }

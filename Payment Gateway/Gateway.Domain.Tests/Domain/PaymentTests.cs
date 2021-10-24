@@ -66,7 +66,7 @@ namespace Gateway.Test.Domain
         {
             Guard.Argument(service, nameof(service)).NotNull();
 
-            throw new NotImplementedException();
+            return service.Execute(this);
         }
     }
 

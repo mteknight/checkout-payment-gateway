@@ -23,6 +23,11 @@ namespace Gateway.API.Controllers
         [HttpPost]
         public async Task<IActionResult> ExecutePayment([FromBody] Payment payment)
         {
+            if (payment is null)
+            {
+                return this.BadRequest($"Parameter {nameof(payment)} is required for this operation.");
+            }
+
             return this.Ok();
         }
     }

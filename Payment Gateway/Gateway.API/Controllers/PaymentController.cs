@@ -31,9 +31,9 @@ namespace Gateway.API.Controllers
                 return this.BadRequest($"Parameter {nameof(payment)} is required for this operation.");
             }
 
-            await payment.Execute(this.paymentService, cancellationToken);
+            var result = await payment.Execute(this.paymentService, cancellationToken);
 
-            return this.Ok();
+            return this.Ok(result);
         }
     }
 }
